@@ -26,18 +26,12 @@ export const DataProvider = ({ children }) => {
                     total,
                 }))(response.data.blogs)
             );
-            setTimeout(() => {
-                setBlogs(response.data.blogs.data);
-                setIsLoading(false);
-                console.log('DONE');
-            }, 1800);
         } catch (error) {
             alert('Failed to fetch blogs');
             console.log(error);
+        } finally {
+            setIsLoading(false);
         }
-        // finally {
-        //     setIsLoading(false);
-        // }
     };
 
     const fetchCategories = async () => {

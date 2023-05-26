@@ -23,23 +23,15 @@ const BlogPage = () => {
                     <div className='row'>
                         <div className='col-lg-8'>
                             <div className='all-blog-posts'>
+                                {!isLoading && !blogs.length && (
+                                    <div
+                                        class='alert alert-warning d-flex justify-content-center'
+                                        role='alert'
+                                    >
+                                        There are no blogs currently
+                                    </div>
+                                )}
                                 <div className='row'>
-                                    {/* {isLoading && (
-                                        <div className='loader d-flex justify-content-center p-5'>
-                                            <ScaleLoader
-                                                loading={true}
-                                                size={150}
-                                                color='#f48840'
-                                                cssOverride={{
-                                                    marginInline: '8px',
-                                                    alignSelf: 'center',
-                                                }}
-                                                aria-label='Loading Spinner'
-                                                data-testid='loader'
-                                            />
-                                        </div>
-                                    )} */}
-
                                     {isLoading && <BlogListLoader />}
                                     {!isLoading &&
                                         blogs.map((blog) => (
@@ -50,19 +42,12 @@ const BlogPage = () => {
                                             />
                                         ))}
 
-                                    {/* {!isLoading && !blogs && (
-                                        <div
-                                            class='alert alert-warning'
-                                            role='alert'
-                                        >
-                                            There are no blogs currently
-                                        </div>
-                                    )} */}
-
-                                    <Pagination
-                                        blogsPagination={blogsPagination}
-                                        fetchBlogs={fetchBlogs}
-                                    />
+                                    {!isLoading && blogs.length > 0 && (
+                                        <Pagination
+                                            blogsPagination={blogsPagination}
+                                            fetchBlogs={fetchBlogs}
+                                        />
+                                    )}
                                 </div>
                             </div>
                         </div>

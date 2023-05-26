@@ -111,6 +111,14 @@ const AllBlogs = () => {
                                     </div>
                                 </div>
                             ))}
+                        {!isLoading && !blogs.length && (
+                            <div
+                                class='alert alert-warning d-flex justify-content-center'
+                                role='alert'
+                            >
+                                There are no blogs currently
+                            </div>
+                        )}
                     </div>
                     <div className='col-lg-12'>
                         <div className='main-button'>
