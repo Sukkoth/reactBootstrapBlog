@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Banner from '../Components/Banner';
 import SingleBlog from '../Components/BlogPage/SingleBlog';
 import SideBar from '../Components/SideBar/SideBar';
@@ -7,9 +7,14 @@ import Pagination from '../Components/Pagination';
 import BlogListLoader from '../Components/ContentLoaders/BlogListLoader';
 
 const BlogPage = () => {
-    const { blogs, fetchBlogs, isLoading, blogsPagination } = useData();
+    const [blogs, setBlogs] = useState([]);
+
+    const { fetchBlogs, isLoading, blogsPagination, errors } = useData();
     useEffect(() => {
-        fetchBlogs({ page: 2 });
+        const fetch = async () => {
+            setBlogs(await fetchBlogs());
+        };
+        fetch();
     }, []);
 
     return (
@@ -23,14 +28,6 @@ const BlogPage = () => {
                     <div className='row'>
                         <div className='col-lg-8'>
                             <div className='all-blog-posts'>
-                                {!isLoading && !blogs.length && (
-                                    <div
-                                        class='alert alert-warning d-flex justify-content-center'
-                                        role='alert'
-                                    >
-                                        There are no blogs currently
-                                    </div>
-                                )}
                                 <div className='row'>
                                     {isLoading && <BlogListLoader />}
                                     {!isLoading &&
@@ -49,6 +46,23 @@ const BlogPage = () => {
                                         />
                                     )}
                                 </div>
+                                {!isLoading && !blogs.length && errors ? (
+                                    <div
+                                        className='alert alert-warning d-flex justify-content-center'
+                                        role='alert'
+                                    >
+                                        {errors
+                                            ? errors.message
+                                            : 'There are no blogs currently'}
+                                    </div>
+                                ) : (
+                                    <div
+                                        className='alert alert-warning d-flex justify-content-center'
+                                        role='alert'
+                                    >
+                                        There are no blogs currently
+                                    </div>
+                                )}
                             </div>
                         </div>
                         <SideBar />

@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }) => {
      * @desc logs in the user
      */
     const login = async (loginCredentials) => {
+        console.log('CREDENTIALS', loginCredentials);
         try {
             const response = await axios.post(
                 'api/v1/auth/login',

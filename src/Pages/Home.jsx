@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Action from '../Components/Action';
-import AllBlogs from '../Components/AllBlogs';
 import SideBar from '../Components/SideBar/SideBar';
 import Banner from '../Components/Banner';
 import ClipLoader from 'react-spinners/ClipLoader';
+import BlogList from '../Components/Home/BlogList';
 
 const Home = () => {
     return (
@@ -23,7 +23,7 @@ const Home = () => {
             <section className='blog-posts'>
                 <div className='container'>
                     <div className='row'>
-                        <AllBlogs />
+                        <BlogList />
                         <SideBar />
                     </div>
                 </div>

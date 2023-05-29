@@ -1,14 +1,18 @@
-import { useEffect } from 'react';
-import blog_post_01 from '../assets/images/blog-post-01.jpg';
+import { useEffect, useState } from 'react';
+import blog_post_01 from '../../assets/images/blog-post-01.jpg';
 import { Link } from 'react-router-dom';
-import useData from '../Hooks/useData';
+import useData from '../../Hooks/useData';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import ReactTimeAgo from 'react-time-ago';
 
-const AllBlogs = () => {
-    const { blogs, isLoading, fetchBlogs } = useData();
+const BlogList = () => {
+    const [blogs, setBlogs] = useState([]);
+    const { isLoading, fetchBlogs } = useData();
     useEffect(() => {
-        fetchBlogs({ limit: 4 });
+        const fetch = async () => {
+            setBlogs(await fetchBlogs());
+        };
+        fetch();
     }, []);
     return (
         <div className='col-lg-8'>
@@ -113,7 +117,7 @@ const AllBlogs = () => {
                             ))}
                         {!isLoading && !blogs.length && (
                             <div
-                                class='alert alert-warning d-flex justify-content-center'
+                                className='alert alert-warning d-flex justify-content-center'
                                 role='alert'
                             >
                                 There are no blogs currently
@@ -131,4 +135,4 @@ const AllBlogs = () => {
     );
 };
 
-export default AllBlogs;
+export default BlogList;

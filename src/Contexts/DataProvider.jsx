@@ -8,15 +8,49 @@ export const DataProvider = ({ children }) => {
     const [blogsPagination, setBlogsPagination] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [errors, setErrors] = useState({});
+
+    const requestConfig = {};
+
+    const fetchData = async (
+        requestConfig = {
+            url: '',
+            method: '',
+            query: {},
+            data: {},
+            headers: {},
+            auth: {},
+        }
+    ) => {
+        try {
+            console.log('MAKING REQUEST');
+            const response = await axios.request(requestConfig);
+            return response.data;
+        } catch (error) {
+            if (error?.response?.status === 404) {
+                setErrors({ message: 'Backend URL not found on server' });
+            } else if (error?.response?.status === 500) {
+                setErrors({ message: 'Internal Server Error' });
+            } else if (error?.message) {
+                setErrors({ message: error?.message });
+            } else {
+                console.log('ANOTHER ERROR OCCURED', error);
+            }
+        }
+    };
 
     const fetchBlogs = async (queryParameter = null) => {
         setIsLoading(true);
+        const requestConfig = {
+            url: '/api/v1/blogs',
+            method: 'get',
+        };
 
-        try {
-            const response = await axios.get('/api/v1/blogs', {
-                params: queryParameter,
-            });
+        //set blog data
+        const blogData = await fetchData(requestConfig);
 
+        //set pagination
+        blogData?.blogs?.current_page &&
             setBlogsPagination(
                 (({ current_page, from, last_page, per_page, total }) => ({
                     current_page,
@@ -24,36 +58,30 @@ export const DataProvider = ({ children }) => {
                     last_page,
                     per_page,
                     total,
-                }))(response.data.blogs)
+                }))(blogData)
             );
-        } catch (error) {
-            alert('Failed to fetch blogs');
-            console.log(error);
-        } finally {
-            setIsLoading(false);
-        }
+        setIsLoading(false);
+        return blogData?.blogs?.data || [];
     };
 
     const fetchCategories = async () => {
+        setIsLoading(true);
         const localData = JSON.parse(localStorage.getItem('categories'));
         if (localData) {
             setCategories(localData);
+            setIsLoading(false);
             return;
         }
-        setIsLoading(true);
-        try {
-            const response = await axios.get('/api/v1/categories');
+
+        const categoriesData = await fetchData({ url: '/api/v1/categories' });
+        categories.Datacategories &&
             localStorage.setItem(
                 'categories',
-                JSON.stringify(response.data.categories)
+                JSON.stringify(categoriesData.categories)
             );
-            setCategories(response.data.categories);
-        } catch (error) {
-            alert('Failed to fetch blogs');
-            console.log(error);
-        } finally {
-            setIsLoading(false);
-        }
+        setCategories(categoriesData.categories);
+        setIsLoading(false);
+        return;
     };
 
     return (
@@ -65,6 +93,7 @@ export const DataProvider = ({ children }) => {
                 fetchCategories,
                 isLoading,
                 blogsPagination,
+                errors,
             }}
         >
             {children}
