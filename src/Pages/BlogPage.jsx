@@ -1,21 +1,12 @@
-import { useEffect, useState } from 'react';
 import Banner from '../Components/Banner';
 import SingleBlog from '../Components/BlogPage/SingleBlog';
 import SideBar from '../Components/SideBar/SideBar';
-import useData from '../Hooks/useData';
 import Pagination from '../Components/Pagination';
 import BlogListLoader from '../Components/ContentLoaders/BlogListLoader';
+import useData from '../Hooks/useData';
 
 const BlogPage = () => {
-    const [blogs, setBlogs] = useState([]);
-
-    const { fetchBlogs, isLoading, blogsPagination, errors } = useData();
-    useEffect(() => {
-        const fetch = async () => {
-            setBlogs(await fetchBlogs());
-        };
-        fetch();
-    }, []);
+    const { blogData, blogLoading, fetchBlog, blogErrors } = useData();
 
     return (
         <>
@@ -29,38 +20,34 @@ const BlogPage = () => {
                         <div className='col-lg-8'>
                             <div className='all-blog-posts'>
                                 <div className='row'>
-                                    {isLoading && <BlogListLoader />}
-                                    {!isLoading &&
-                                        blogs.map((blog) => (
+                                    {blogLoading && <BlogListLoader />}
+                                    {!blogLoading &&
+                                        blogData?.blogs?.map((blog) => (
                                             <SingleBlog
                                                 key={blog.id}
                                                 blog={blog}
-                                                isLoading={isLoading}
+                                                blogLoading={blogLoading}
                                             />
                                         ))}
 
-                                    {!isLoading && blogs.length > 0 && (
-                                        <Pagination
-                                            blogsPagination={blogsPagination}
-                                            fetchBlogs={fetchBlogs}
-                                        />
-                                    )}
+                                    {!blogLoading &&
+                                        blogData?.blogs?.length > 0 && (
+                                            <Pagination
+                                                blogsPagination={
+                                                    blogData.pagination
+                                                }
+                                                fetchBlogs={fetchBlog}
+                                            />
+                                        )}
                                 </div>
-                                {!isLoading && !blogs.length && errors ? (
+                                {!blogLoading && !blogData?.blogs?.length && (
                                     <div
                                         className='alert alert-warning d-flex justify-content-center'
                                         role='alert'
                                     >
-                                        {errors
-                                            ? errors.message
+                                        {blogErrors
+                                            ? blogErrors.message
                                             : 'There are no blogs currently'}
-                                    </div>
-                                ) : (
-                                    <div
-                                        className='alert alert-warning d-flex justify-content-center'
-                                        role='alert'
-                                    >
-                                        There are no blogs currently
                                     </div>
                                 )}
                             </div>

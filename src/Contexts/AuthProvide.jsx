@@ -1,6 +1,8 @@
 import axios from '../API/axios';
 import { useEffect, useState, createContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useData from '../Hooks/useData';
+import useFetchData from '../API/useFetchData';
 
 const AuthContext = createContext({});
 
@@ -8,23 +10,28 @@ export const AuthProvider = ({ children }) => {
     //states and variables
     const [auth, setAuth] = useState({});
     const [errors, setErrors] = useState({});
+    const { fetchData } = useData();
 
     const navigate = useNavigate();
 
-    //functions
-    const csrf = () => axios.get('/sanctum/csrf-cookie');
+    const registerUser = async (registrationData) => {
+        const requestConfig = {
+            url: '/api/v1/auth/register',
+            data: registrationData,
+        };
+        const data = await fetchData(requestConfig);
+        console.log(data);
 
-    const registerUser = async (registrationFileds) => {
-        try {
-            const response = await axios.post(
-                '/api/v1/auth/register',
-                registrationFileds
-            );
-            setAuth(response.data);
-            localStorage.setItem('auth', JSON.stringify(response.data));
-        } catch (error) {
-            setErrors(error.response.data);
-        }
+        // try {
+        //     const response = await axios.post(
+        //         '/api/v1/auth/register',
+        //         registrationData
+        //     );
+        //     setAuth(response.data);
+        //     localStorage.setItem('auth', JSON.stringify(response.data));
+        // } catch (error) {
+        //     setErrors(error.response.data);
+        // }
     };
 
     /**
@@ -34,25 +41,31 @@ export const AuthProvider = ({ children }) => {
      */
     const login = async (loginCredentials) => {
         console.log('CREDENTIALS', loginCredentials);
-        try {
-            const response = await axios.post(
-                'api/v1/auth/login',
-                loginCredentials
-            );
-            if (response.status === 200) {
-                setAuth(response.data);
-                localStorage.setItem('auth', JSON.stringify(response.data));
-                navigate('/');
-            } else {
-                alert('OTHER RESPONSE');
-            }
-        } catch (error) {
-            if (error?.response?.data) {
-                setErrors(error?.response?.data);
-            } else {
-                setErrors({ message: error?.message });
-            }
-        }
+        const { data, isLoading, errors } = useFetchData({
+            method: 'post',
+            url: 'api/v1/auth/login',
+            data: loginCredentials,
+        });
+
+        // try {
+        //     const response = await axios.post(
+        //         'api/v1/auth/login',
+        //         loginCredentials
+        //     );
+        //     if (response.status === 200) {
+        //         setAuth(response.data);
+        //         localStorage.setItem('auth', JSON.stringify(response.data));
+        //         navigate('/');
+        //     } else {
+        //         alert('OTHER RESPONSE');
+        //     }
+        // } catch (error) {
+        //     if (error?.response?.data) {
+        //         setErrors(error?.response?.data);
+        //     } else {
+        //         setErrors({ message: error?.message });
+        //     }
+        // }
     };
 
     /**
@@ -93,7 +106,6 @@ export const AuthProvider = ({ children }) => {
         <AuthContext.Provider
             value={{
                 AUTH: auth,
-                csrf,
                 login,
                 errors,
                 setErrors,

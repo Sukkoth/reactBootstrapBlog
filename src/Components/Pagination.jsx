@@ -1,19 +1,14 @@
 import React from 'react';
-
-const Pagination = ({ blogsPagination, fetchBlogs }) => {
+const Pagination = ({ blogsPagination, fetchBlogs, setBlogs }) => {
+    const changePage = async (page = 1) => {
+        fetchBlogs({ params: { page } });
+    };
     return (
         <div className='col-lg-12'>
             <ul className='page-numbers'>
                 {/* first page */}
                 <li>
-                    <a
-                        href='#'
-                        onClick={() =>
-                            fetchBlogs({
-                                page: 1,
-                            })
-                        }
-                    >
+                    <a href='#' onClick={() => changePage(1)}>
                         <i className='fa fa-angle-double-left'></i>
                     </a>
                 </li>
@@ -24,9 +19,7 @@ const Pagination = ({ blogsPagination, fetchBlogs }) => {
                         <a
                             href='#'
                             onClick={() =>
-                                fetchBlogs({
-                                    page: blogsPagination.current_page - 1,
-                                })
+                                changePage(blogsPagination.current_page - 1)
                             }
                         >
                             {blogsPagination.current_page - 1}
@@ -45,9 +38,7 @@ const Pagination = ({ blogsPagination, fetchBlogs }) => {
                         <a
                             href='#'
                             onClick={() =>
-                                fetchBlogs({
-                                    page: blogsPagination.current_page + 1,
-                                })
+                                changePage(blogsPagination.current_page + 1)
                             }
                         >
                             {blogsPagination.current_page + 1}
@@ -60,9 +51,7 @@ const Pagination = ({ blogsPagination, fetchBlogs }) => {
                         <a
                             href='#'
                             onClick={() =>
-                                fetchBlogs({
-                                    page: blogsPagination.last_page,
-                                })
+                                changePage(blogsPagination.last_page)
                             }
                         >
                             <i className='fa fa-angle-double-right'></i>

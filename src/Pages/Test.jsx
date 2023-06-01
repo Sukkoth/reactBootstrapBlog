@@ -1,19 +1,40 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import useData from '../Hooks/useData';
 
-import ContentLoader from 'react-content-loader';
+const Test = () => {
+    const { blogData, blogLoading, fetchBlog } = useData();
 
-const SideBarContentLoader = () => (
-    <ContentLoader viewBox='0 0 350 50'>
-        <rect x='10' y='0' rx='4' ry='4' width='300' height='20' />
-        <rect x='10' y='30' rx='3' ry='3' width='150' height='15' />
-    </ContentLoader>
-);
-const Test = (props) => {
-    return <SideBarContentLoader />;
+    return (
+        <section className='contact-us'>
+            <div className='container'>
+                <div className='row'>
+                    <div
+                        className='down-contact col-12 d-flex justify-content-center align-items-center mt-5'
+                        style={{
+                            minHeight: '150px',
+                        }}
+                    >
+                        <div className='sidebar-item contact-form mt-5 auth-form'>
+                            <div className='sidebar-heading'>
+                                <h2>LOGIN</h2>
+                                <button
+                                    onClick={() =>
+                                        fetchBlog({
+                                            params: {
+                                                page: 6,
+                                            },
+                                        })
+                                    }
+                                >
+                                    Update
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
 };
 
-Test.defaultProps = {
-    mainHeader: 'SUKKOTH',
-    headerText: 'A GREAT PLACE TO SHARE IDEA!',
-};
 export default Test;

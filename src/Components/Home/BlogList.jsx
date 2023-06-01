@@ -1,19 +1,22 @@
-import { useEffect, useState } from 'react';
 import blog_post_01 from '../../assets/images/blog-post-01.jpg';
 import { Link } from 'react-router-dom';
-import useData from '../../Hooks/useData';
 import ScaleLoader from 'react-spinners/ScaleLoader';
 import ReactTimeAgo from 'react-time-ago';
+import useFetchData from '../../API/useFetchData';
 
 const BlogList = () => {
-    const [blogs, setBlogs] = useState([]);
-    const { isLoading, fetchBlogs } = useData();
-    useEffect(() => {
-        const fetch = async () => {
-            setBlogs(await fetchBlogs());
-        };
-        fetch();
-    }, []);
+    const {
+        data: blogData,
+        isLoading,
+        errors: blogErrors,
+    } = useFetchData({
+        method: 'get',
+        url: '/api/v1/blogs/suggestions',
+        params: {
+            limit: 5,
+        },
+    });
+
     return (
         <div className='col-lg-8'>
             <div className='all-blog-posts'>
@@ -22,7 +25,7 @@ const BlogList = () => {
                         {isLoading && (
                             <div className='loader d-flex justify-content-center p-5'>
                                 <ScaleLoader
-                                    loading={true}
+                                    loading={isLoading}
                                     size={150}
                                     color='#f48840'
                                     cssOverride={{
@@ -35,8 +38,8 @@ const BlogList = () => {
                             </div>
                         )}
                         {!isLoading &&
-                            blogs &&
-                            blogs.map((blog) => (
+                            blogData?.blogs &&
+                            blogData?.blogs?.map((blog) => (
                                 <div className='blog-post' key={blog.id}>
                                     <div className='blog-thumb'>
                                         <img src={blog_post_01} alt='' />
@@ -44,7 +47,7 @@ const BlogList = () => {
                                     <div className='down-content'>
                                         <span>{blog?.category?.name}</span>
                                         <Link to={`blogs/${blog.id}`}>
-                                            <h4>{blog.title}</h4>
+                                            <h4>{blog?.title}</h4>
                                         </Link>
                                         <ul className='post-info'>
                                             <li>
@@ -57,7 +60,7 @@ const BlogList = () => {
                                                     <ReactTimeAgo
                                                         date={
                                                             new Date(
-                                                                blog.created_at
+                                                                blog?.created_at
                                                             )
                                                         }
                                                     />
@@ -115,20 +118,25 @@ const BlogList = () => {
                                     </div>
                                 </div>
                             ))}
-                        {!isLoading && !blogs.length && (
+
+                        {!isLoading && !blogData?.blogs?.length && (
                             <div
                                 className='alert alert-warning d-flex justify-content-center'
                                 role='alert'
                             >
-                                There are no blogs currently
+                                {blogErrors
+                                    ? blogErrors.message
+                                    : 'There are no blogs currently'}
                             </div>
                         )}
                     </div>
-                    <div className='col-lg-12'>
-                        <div className='main-button'>
-                            <Link to='/blogs'>View All Posts</Link>
+                    {!isLoading && blogData?.blogs?.length > 0 && (
+                        <div className='col-lg-12'>
+                            <div className='main-button'>
+                                <Link to='/blogData.blogs'>View All Posts</Link>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         </div>

@@ -16,13 +16,13 @@ const Login = () => {
         await login({ email, password });
         setIsLoading(false);
     };
-    useEffect(() => {
-        setErrors({});
-    }, [email, password]);
+    // useEffect(() => {
+    //     setErrors({});
+    // }, [email, password]);
 
-    useEffect(() => {
-        USER?.email && navigate('/');
-    }, []);
+    // useEffect(() => {
+    //     USER?.email && navigate('/');
+    // }, []);
 
     return (
         <section className='contact-us'>

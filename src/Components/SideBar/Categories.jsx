@@ -1,13 +1,10 @@
-import { useEffect } from 'react';
 import useData from '../../Hooks/useData';
 import { ScaleLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';
 
 const Categories = () => {
-    const { categories, fetchCategories, isLoading } = useData();
-    useEffect(() => {
-        fetchCategories();
-    }, []);
+    const { categories, categoryLoading } = useData();
+
     return (
         <div className='col-lg-12'>
             <div className='sidebar-item categories'>
@@ -15,9 +12,9 @@ const Categories = () => {
                     <h2>Categories</h2>
                 </div>
                 <div className='content'>
-                    {!categories && (
+                    {categoryLoading && (
                         <ScaleLoader
-                            loading={true}
+                            loading={categoryLoading}
                             size={150}
                             color='#f48840'
                             cssOverride={{
@@ -30,11 +27,12 @@ const Categories = () => {
                     )}
 
                     <ul>
-                        {categories.map((category) => (
-                            <li key={category.id}>
-                                <Link>- {category.name}</Link>
-                            </li>
-                        ))}
+                        {!categoryLoading &&
+                            categories.map((category) => (
+                                <li key={category.id}>
+                                    <Link>- {category.name}</Link>
+                                </li>
+                            ))}
                     </ul>
                 </div>
             </div>
