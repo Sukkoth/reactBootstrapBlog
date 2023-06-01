@@ -20,6 +20,7 @@ const Register = () => {
         errors && console.log('form error:', errors);
     }
     const handleRegistration = (data) => {
+        console.log('DATA', data);
         registerUser(data);
         resetForm();
         setSuccessMessage('Registered Successfully');

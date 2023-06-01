@@ -15,23 +15,19 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
 
     const registerUser = async (registrationData) => {
-        const requestConfig = {
+        const request = {
+            method: 'post',
             url: '/api/v1/auth/register',
             data: registrationData,
         };
-        const data = await fetchData(requestConfig);
-        console.log(data);
-
-        // try {
-        //     const response = await axios.post(
-        //         '/api/v1/auth/register',
-        //         registrationData
-        //     );
-        //     setAuth(response.data);
-        //     localStorage.setItem('auth', JSON.stringify(response.data));
-        // } catch (error) {
-        //     setErrors(error.response.data);
-        // }
+        console.log('FROM PROVIDER', registrationData);
+        try {
+            const response = await axios.request(request);
+            setAuth(response.data);
+            localStorage.setItem('auth', JSON.stringify(response.data));
+        } catch (error) {
+            setErrors(error.response.data);
+        }
     };
 
     /**
@@ -41,31 +37,25 @@ export const AuthProvider = ({ children }) => {
      */
     const login = async (loginCredentials) => {
         console.log('CREDENTIALS', loginCredentials);
-        const { data, isLoading, errors } = useFetchData({
-            method: 'post',
-            url: 'api/v1/auth/login',
-            data: loginCredentials,
-        });
-
-        // try {
-        //     const response = await axios.post(
-        //         'api/v1/auth/login',
-        //         loginCredentials
-        //     );
-        //     if (response.status === 200) {
-        //         setAuth(response.data);
-        //         localStorage.setItem('auth', JSON.stringify(response.data));
-        //         navigate('/');
-        //     } else {
-        //         alert('OTHER RESPONSE');
-        //     }
-        // } catch (error) {
-        //     if (error?.response?.data) {
-        //         setErrors(error?.response?.data);
-        //     } else {
-        //         setErrors({ message: error?.message });
-        //     }
-        // }
+        try {
+            const response = await axios.post(
+                'api/v1/auth/login',
+                loginCredentials
+            );
+            if (response.status === 200) {
+                setAuth(response.data);
+                localStorage.setItem('auth', JSON.stringify(response.data));
+                navigate('/');
+            } else {
+                alert('OTHER RESPONSE');
+            }
+        } catch (error) {
+            if (error?.response?.data) {
+                setErrors(error?.response?.data);
+            } else {
+                setErrors({ message: error?.message });
+            }
+        }
     };
 
     /**
