@@ -20,7 +20,6 @@ export const AuthProvider = ({ children }) => {
             url: '/api/v1/auth/register',
             data: registrationData,
         };
-        console.log('FROM PROVIDER', registrationData);
         try {
             const response = await axios.request(request);
             setAuth(response.data);
@@ -36,7 +35,6 @@ export const AuthProvider = ({ children }) => {
      * @desc logs in the user
      */
     const login = async (loginCredentials) => {
-        console.log('CREDENTIALS', loginCredentials);
         try {
             const response = await axios.post(
                 'api/v1/auth/login',

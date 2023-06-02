@@ -5,6 +5,8 @@ import ReactTimeAgo from 'react-time-ago';
 import ContentLoader from 'react-content-loader';
 
 const SingleBlog = ({ thumb_img, blog }) => {
+    console.log('IN SINGLE');
+
     return (
         <div className='col-lg-6'>
             <div className='blog-post'>

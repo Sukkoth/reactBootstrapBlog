@@ -9,10 +9,10 @@ import Test from './Pages/Test';
 import BlogDetail from './Pages/BlogDetail';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
-import { useEffect } from 'react';
-import useAuth from './Hooks/useAuth';
 import Profile from './Pages/Profile';
 import TimeAgo from 'javascript-time-ago';
+import Index from './Components/BlogPage/Index';
+import Categories from './Components/SideBar/Categories';
 
 import en from 'javascript-time-ago/locale/en.json';
 import ru from 'javascript-time-ago/locale/ru.json';
@@ -27,9 +27,16 @@ function App() {
             <Routes>
                 <Route path='/' Component={Home} />
                 <Route path='/about' Component={About} />
-                <Route path='/blogs' Component={BlogPage} />
+                <Route path='/blogs/{*}' Component={BlogPage}>
+                    <Route path='' Component={Index} />
+                    <Route path=':blogId' Component={BlogDetail} />
+                    <Route
+                        path='categories/:{categoryName}'
+                        Component={Categories}
+                    />
+                </Route>
                 <Route path='/contact' Component={Contact} />
-                <Route path='/blogs/:blogId' Component={BlogDetail} />
+                {/* <Route path='/blogs/:blogId' Component={BlogDetail} /> */}
                 <Route path='/test' Component={Test} />
                 <Route path='/login' Component={Login} />
                 <Route path='/register' Component={Register} />
