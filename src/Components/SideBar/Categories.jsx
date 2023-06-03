@@ -30,7 +30,11 @@ const Categories = () => {
                         {!categoryLoading &&
                             categories.map((category) => (
                                 <li key={category.id}>
-                                    <Link>- {category.name}</Link>
+                                    <Link
+                                        to={`/blogs/categories/${category.name}`}
+                                    >
+                                        - {category.name}
+                                    </Link>
                                 </li>
                             ))}
                     </ul>

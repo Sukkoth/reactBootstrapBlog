@@ -8,9 +8,10 @@ const useFetchData = (
         params: {},
         headers: {},
         auth: {},
-    }
+    },
+    intialFetch = true
 ) => {
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [data, setData] = useState([]);
     const [requestConfig, setRequestConfig] = useState(requestConfigParam);
@@ -19,7 +20,10 @@ const useFetchData = (
         setIsLoading(true);
         setErrors({});
         try {
-            console.log('MAKING REQUEST');
+            console.log('MAKING REQUEST', {
+                ...requestConfig,
+                ...request,
+            });
             const response = await axios.request({
                 ...requestConfig,
                 ...request,
@@ -47,7 +51,7 @@ const useFetchData = (
     };
 
     useEffect(() => {
-        fetchData(requestConfig);
+        intialFetch && fetchData(requestConfig);
     }, [requestConfig]);
 
     return { isLoading, errors, data, fetchData };

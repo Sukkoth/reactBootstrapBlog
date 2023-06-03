@@ -8,17 +8,18 @@ export const DataProvider = ({ children }) => {
         isLoading: blogLoading,
         fetchData: fetchBlog,
         errors: blogErrors,
-    } = useFetchData({
-        url: '/api/v1/blogs',
-        method: 'get',
-    });
+    } = useFetchData(
+        {
+            url: '/api/v1/blogs',
+            method: 'get',
+        },
+        false
+    );
 
     const { data: categoryData, isLoading: categoryLoading } = useFetchData({
         url: '/api/v1/categories',
         method: 'get',
     });
-
-    !categoryLoading && console.log('CATEGORIES', categoryData.categories);
 
     return (
         <DataContext.Provider

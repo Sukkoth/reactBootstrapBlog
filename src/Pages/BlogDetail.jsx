@@ -3,9 +3,24 @@ import Action from '../Components/Action';
 import SideBar from '../Components/SideBar/SideBar';
 import blog_post_02 from '../assets/images/blog-post-02.jpg';
 import Comments from '../Components/Comments/Comments';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import useFetchData from '../API/useFetchData';
+import ReactTimeAgo from 'react-time-ago';
 
 const BlogDetail = () => {
+    const { blogId } = useParams();
+    const {
+        data: blogData,
+        isLoading,
+        fetchData,
+    } = useFetchData(
+        {
+            url: `/api/v1/blogs/${blogId}`,
+            method: 'get',
+        },
+        true
+    );
+
     return (
         <>
             <Banner />
@@ -24,133 +39,101 @@ const BlogDetail = () => {
                                                     alt=''
                                                 />
                                             </div>
-                                            <div className='down-content'>
-                                                <span>Lifestyle</span>
-                                                <Link>
-                                                    <h4>
-                                                        Aenean pulvinar gravida
-                                                        sem nec
-                                                    </h4>
-                                                </Link>
-                                                <ul className='post-info'>
-                                                    <li>
-                                                        <a href='#'>Admin</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href='#'>
-                                                            May 12, 2020
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href='#comments'>
-                                                            10 Comments
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                                <p>
-                                                    You can browse different
-                                                    tags such as{' '}
-                                                    <a
-                                                        rel='nofollow'
-                                                        href='https://templatemo.com/tag/multi-page'
-                                                        target='_parent'
-                                                    >
-                                                        multi-page
-                                                    </a>
-                                                    ,{' '}
-                                                    <a
-                                                        rel='nofollow'
-                                                        href='https://templatemo.com/tag/resume'
-                                                        target='_parent'
-                                                    >
-                                                        resume
-                                                    </a>
-                                                    ,{' '}
-                                                    <a
-                                                        rel='nofollow'
-                                                        href='https://templatemo.com/tag/video'
-                                                        target='_parent'
-                                                    >
-                                                        video
-                                                    </a>
-                                                    , etc. to see more CSS
-                                                    templates. Sed hendrerit
-                                                    rutrum arcu, non malesuada
-                                                    nisi. Sed id facilisis
-                                                    turpis. Donec justo elit,
-                                                    dapibus vel ultricies in,
-                                                    molestie sit amet risus. In
-                                                    nunc augue, rhoncus sed
-                                                    libero et, tincidunt tempor
-                                                    nisl. Donec egestas, quam eu
-                                                    rutrum ultrices, sapien ante
-                                                    posuere nisl, ac eleifend
-                                                    eros orci vel ante.
-                                                    Pellentesque vitae eleifend
-                                                    velit. Etiam blandit felis
-                                                    sollicitudin vestibulum
-                                                    feugiat.
-                                                    <br />
-                                                    <br />
-                                                    Donec tincidunt leo nec
-                                                    magna gravida varius.
-                                                    Suspendisse felis orci,
-                                                    egestas ac sodales quis,
-                                                    venenatis et neque. Vivamus
-                                                    facilisis dignissim arcu et
-                                                    blandit. Maecenas finibus
-                                                    dui non pulvinar lacinia. Ut
-                                                    lacinia finibus lorem vel
-                                                    porttitor. Suspendisse et
-                                                    metus nec libero ultrices
-                                                    varius eget in risus. Cras
-                                                    id nibh at erat pulvinar
-                                                    malesuada et non ipsum.
-                                                    Suspendisse id ipsum leo.
-                                                </p>
-                                                <div className='post-options'>
-                                                    <div className='row'>
-                                                        <div className='col-6'>
-                                                            <ul className='post-tags'>
-                                                                <li>
-                                                                    <i className='fa fa-tags'></i>
-                                                                </li>
-                                                                <li>
-                                                                    <a href='#'>
-                                                                        Best
-                                                                        Templates
-                                                                    </a>
-                                                                    ,
-                                                                </li>
-                                                                <li>
-                                                                    <a href='#'>
-                                                                        TemplateMo
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div className='col-6'>
-                                                            <ul className='post-share'>
-                                                                <li>
-                                                                    <i className='fa fa-share-alt'></i>
-                                                                </li>
-                                                                <li>
-                                                                    <a href='#'>
-                                                                        Facebook
-                                                                    </a>
-                                                                    ,
-                                                                </li>
-                                                                <li>
-                                                                    <a href='#'>
-                                                                        {' '}
-                                                                        Twitter
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
+                                            {Object.keys(blogData) && (
+                                                <div className='down-content'>
+                                                    <span>
+                                                        {
+                                                            blogData?.blog
+                                                                ?.category?.name
+                                                        }
+                                                    </span>
+                                                    <Link>
+                                                        <h4>
+                                                            {
+                                                                blogData?.blog
+                                                                    ?.title
+                                                            }
+                                                        </h4>
+                                                    </Link>
+                                                    <ul className='post-info'>
+                                                        <li>
+                                                            <a href='#'>
+                                                                {
+                                                                    blogData
+                                                                        ?.blog
+                                                                        ?.author
+                                                                        ?.full_name
+                                                                }
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href='#'>
+                                                                <ReactTimeAgo
+                                                                    locale='en-us'
+                                                                    date={
+                                                                        new Date(
+                                                                            blogData
+                                                                                ?.blog
+                                                                                ?.created_at ||
+                                                                                new Date()
+                                                                        )
+                                                                    }
+                                                                />
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href='#comments'>
+                                                                10 Comments
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <p>
+                                                       {blogData?.blog?.body}
+                                                    </p>
+                                                    <div className='post-options'>
+                                                        <div className='row'>
+                                                            <div className='col-6'>
+                                                                <ul className='post-tags'>
+                                                                    <li>
+                                                                        <i className='fa fa-tags'></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href='#'>
+                                                                            Best
+                                                                            Templates
+                                                                        </a>
+                                                                        ,
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href='#'>
+                                                                            TemplateMo
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div className='col-6'>
+                                                                <ul className='post-share'>
+                                                                    <li>
+                                                                        <i className='fa fa-share-alt'></i>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href='#'>
+                                                                            Facebook
+                                                                        </a>
+                                                                        ,
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href='#'>
+                                                                            {' '}
+                                                                            Twitter
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            )}
                                         </div>
                                     </div>
                                     <Comments />

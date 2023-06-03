@@ -1,7 +1,7 @@
 import React from 'react';
 const Pagination = ({ blogsPagination, fetchBlogs, setBlogs }) => {
     const changePage = async (page = 1) => {
-        fetchBlogs({ params: { page } });
+        fetchBlogs({ url: blogsPagination.path, params: { page } });
     };
     return (
         <div className='col-lg-12'>
