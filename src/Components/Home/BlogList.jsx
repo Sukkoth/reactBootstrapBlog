@@ -42,7 +42,10 @@ const BlogList = () => {
                             blogData?.blogs?.map((blog) => (
                                 <div className='blog-post' key={blog.id}>
                                     <div className='blog-thumb'>
-                                        <img src={blog_post_01} alt='' />
+                                        <img
+                                            src={blog?.cover}
+                                            alt={blog?.title}
+                                        />
                                     </div>
                                     <div className='down-content'>
                                         <span>{blog?.category?.name}</span>
@@ -70,18 +73,7 @@ const BlogList = () => {
                                                 <Link>12 Comments</Link>
                                             </li>
                                         </ul>
-                                        <p>
-                                            Stand Blog is a free HTML CSS
-                                            template for your CMS theme. You can
-                                            easily adapt or customize it for any
-                                            kind of CMS or website builder. You
-                                            are allowed to use it for your
-                                            business. You are NOT allowed to
-                                            re-distribute the template ZIP file
-                                            on any template collection site for
-                                            the download purpose. for more info.
-                                            Thank you.
-                                        </p>
+                                        <p>{blog?.body}</p>
                                         <div className='post-options'>
                                             <div className='row'>
                                                 <div className='col-6'>

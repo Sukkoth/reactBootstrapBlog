@@ -35,7 +35,7 @@ const BlogDetail = () => {
                                         <div className='blog-post'>
                                             <div className='blog-thumb'>
                                                 <img
-                                                    src={blog_post_02}
+                                                    src={blogData?.blog?.cover}
                                                     alt=''
                                                 />
                                             </div>
@@ -88,7 +88,7 @@ const BlogDetail = () => {
                                                         </li>
                                                     </ul>
                                                     <p>
-                                                       {blogData?.blog?.body}
+                                                        {blogData?.blog?.body}
                                                     </p>
                                                     <div className='post-options'>
                                                         <div className='row'>

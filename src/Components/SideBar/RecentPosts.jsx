@@ -27,7 +27,7 @@ const RecentPosts = () => {
                             blogData.blogs &&
                             blogData.blogs.map((blog) => (
                                 <li key={blog.id}>
-                                    <Link>
+                                    <Link to={`/blogs/${blog?.id}`}>
                                         <h5>{blog.title}</h5>
                                         <span>
                                             <ReactTimeAgo
